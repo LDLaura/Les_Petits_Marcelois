@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Se connecter
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <section class="container-fluid mt-4">
+        <form action="{{ path('app.login') }}" method="POST" class="p-3 form card w-50 mx-auto">
+            {% if error %}
+                <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+            <h1 class="text-center">Se connecter</h1>  
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" name="_username" id="email" required>
+
+            <label for="password" class="form-label">Mot de passe</label>
+            <input type="password" class="form-control" name="_password" id="email" required>
+
+            <div class="d-grid gap-2 d-md-block mt-4 text-center">
+                <button type="submit" class="btn btn-inline btn-primary">Se connecter</button>
+            </div>    
+        </form>
+    </section>
+{% endblock %}
