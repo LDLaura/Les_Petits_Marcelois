@@ -38,13 +38,14 @@ class ArticleController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // We retrieve the article and assign the user to it before sending it to the database
-            $user =$this->getUser();
+            $user = $this->getUser();
             $article->setUser($user);
 
             $this->em->persist($article);
             $this->em->flush();
 
-            $this-> addFlash('success', 'L\'article a bien été créé');
+            $this->addFlash('success', 'L\'article a bien été créé');
+            
             return $this->redirectToRoute('admin.articles.index');
         }
         return $this->render('Backend/Article/create.html.twig', [
