@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Administration des articles
+	{{ parent() }}
+{% endblock %}
+
+{% block body %}
+	<section class="container-fluid mt-4">
+		<h1 class="text-center">Administration des articles</h1>
+		<a href="{{ path('admin.articles.create')}}" class="btn btn-primary">Créer un produit</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Titre</th>
+                    <th>Contenu</th>
+                    <th>Nom image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in articles %}
+                    <tr>
+                        <td>{{ article.id }}</td>
+                        <td>{{ article.title }}</td>
+                        <td>{{ article.content }}</td>
+                        <td>{{ article.imageName }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+	</section>
+{% endblock %}

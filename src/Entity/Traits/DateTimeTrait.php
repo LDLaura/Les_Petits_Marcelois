@@ -3,12 +3,10 @@
 namespace App\Entity\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 trait DateTimeTrait
 {
     #[ORM\Column]
-    #[Assert\NotBlank]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]

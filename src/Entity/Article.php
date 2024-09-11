@@ -2,20 +2,25 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\DateTimeTrait;
-use App\Repository\ArticleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Entity\Traits\EnableTrait;
+use App\Entity\Traits\DateTimeTrait;
+use App\Repository\ArticleRepository;
+use DateTimeImmutable;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_TITLE', fields: ['title'])]
 #[UniqueEntity(fields: ['title'], message: 'Ce titre existe déjà')]
 #[ORM\HasLifecycleCallbacks]
+#[Vich\Uploadable]
 class Article
 {
-    use DateTimeTrait;
+    use DateTimeTrait, EnableTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -32,8 +37,18 @@ class Article
     #[Assert\Length(max: 20000)]
     private ?string $content = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?user $user = null;
+
+    #[Vich\UploadableField(mapping: 'articles_image', fileNameProperty: 'imageName', size: 'imageSize')]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(length: 255)]
     private ?string $imageName = null;
+
+    #[ORM\Column]
+    private ?int $imageSize = null;
 
     public function getId(): ?int
     {
@@ -64,6 +79,34 @@ class Article
         return $this;
     }
 
+    public function getUser(): ?user
+    {
+        return $this->user;
+    }
+
+    public function setUser(?user $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if (null != $imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new DateTimeImmutable();
+        }
+    } 
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
     public function getImageName(): ?string
     {
         return $this->imageName;
@@ -74,5 +117,15 @@ class Article
         $this->imageName = $imageName;
 
         return $this;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
+    }
+
+    public function setImageSize(?int $imageSize): void
+    {
+        $this->imageSize = $imageSize;
     }
 }
