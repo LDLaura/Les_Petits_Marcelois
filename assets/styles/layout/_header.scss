@@ -1,0 +1,53 @@
+.navbar{
+    position : sticky;
+    top: 0;
+    width: 100%;
+    z-index: 99;
+
+    &-content {
+        @include flex(flex-start, center, $gap: 2em);
+        padding: 1em 0;
+    }
+
+    &-logo {
+        width: 50px;
+        height: auto;
+        margin-left: 2rem;
+    }
+    
+
+    &-links {
+        @include flex(flex-end, center, $gap: 1em);
+
+        margin-bottom: 0;
+        margin-right: 2rem;
+        flex: 1;
+    }
+
+    &-link{
+        a {
+            font-family: $font-title;
+            font-size: 0.8em;
+            color: $text-color;
+        }
+    }
+
+    &-btn-links {
+        @include flex(flex-end, center, $gap:1em);
+
+        margin-bottom: 0;
+    }
+
+    &-underline {
+        height: 10px;
+        background-color: $primary;
+        width: 100%;
+
+        &::after {
+            content: "";
+            display: block;
+            @extend .navbar-underline;
+          }
+    }
+
+}
