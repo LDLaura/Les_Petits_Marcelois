@@ -1,0 +1,45 @@
+*{
+    margin: 0;
+    padding: 0;
+    outline: 0;
+}
+
+html, 
+body {
+    scroll-behavior: smooth;
+}
+
+a {
+    font-family: $font-text;
+    font-size: 1.2rem;
+    text-decoration: none;
+    color: $text-color;
+    display: inline-block;
+}
+
+img, 
+video, 
+figure {
+    max-width: 100%;
+    object-fit: cover;
+}
+
+h1 {
+    font-family: $font-title;
+    color: $text-color;
+    font-size: 2rem;
+}
+
+ul,
+ol {
+    list-style: none;
+    padding: 0;
+}
+
+p {
+    margin-bottom: 0.5em;
+
+    &:last-of-type {
+        margin-bottom: 1em;
+    }
+}

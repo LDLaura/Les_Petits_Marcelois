@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Administration des infos utilisateurs
+	{{ parent() }}
+{% endblock %}
+
+{% block body %}
+	<section class="container-fluid mt-4">
+		<h1 class="text-center">Administration des infos utilisateurs</h1>
+		<a href="{{ path('admin.usersinfos.create')}}" class="btn btn-primary">Créer les infos utilisateur</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Prénom</th>
+                    <th>Nom de famille</th>
+                    <th>Adresse</th>
+                    <th>Date de naissance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for userInfo in userInfos %}
+                    <tr>
+                        <td>{{ userInfo.id }}</td>
+                        <td>{{ userInfo.firstName }}</td>
+                        <td>{{ userInfo.lastName }}</td>
+                        <td>{{ userInfo.adress}}</td>
+                        {# <td>{{ userInfo.dateBirth}}</td> #}
+                        <td>
+                            <a href="{{ path('admin.usersinfos.update', {id: userInfo.id}) }}" class="btn btn-warning">Modifer</a>
+                            {% include 'Backend/Components/_delete.html.twig' with {
+                                url: path('admin.usersinfos.delete', {id: userInfo.id}),
+                                message: 'Êtes-vous sûr de vouloir supprimer les infos de cet utilisateur ?',
+                                id: userInfo.id
+                            } %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+	</section>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Modification des infos utilisateurs
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <section class="container-fluid mt-4">
+        <h1>Modification des infos utilisateurs</h1>
+        {% include 'Backend/UserInfos/_form.html.twig' with {buttonLabel: "Modifier"} %}
+    </section>
+{% endblock %}

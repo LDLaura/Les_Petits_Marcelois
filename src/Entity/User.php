@@ -44,6 +44,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'user')]
     private Collection $articles;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?UserInfos $userInfos = null;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -152,4 +155,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getUserInfos(): ?UserInfos
+    {
+        return $this->userInfos;
+    }
+
+    public function setUserInfos(UserInfos $userInfos): static
+    {
+        // set the owning side of the relation if necessary
+        if ($userInfos->getUser() !== $this) {
+            $userInfos->setUser($this);
+        }
+
+        $this->userInfos = $userInfos;
+
+        return $this;
+    }
+
+    
 }
