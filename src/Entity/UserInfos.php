@@ -34,6 +34,11 @@ class UserInfos
     #[Assert\NotBlank]
     private ?\DateTimeInterface $dateBirth = null;
 
+    // #[ORM\OneToOne(inversedBy: 'userInfos', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName:'id', nullable: false)]
+    private ?user $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,4 +91,18 @@ class UserInfos
 
         return $this;
     }
+
+    public function getUser(): ?user
+    {
+        return $this->user;
+    }
+
+    public function setUser(user $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+   
 }
