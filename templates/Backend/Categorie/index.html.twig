@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Administration des categories
+	{{ parent() }}
+{% endblock %}
+
+{% block body %}
+	<section class="container-fluid mt-4">
+		<h1 class="text-center">Administration des categories</h1>
+		<a href="{{ path('admin.categories.create')}}" class="btn btn-primary">Créer une categorie</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom</th>
+                    <th>Actif</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for categorie in categories %}
+                    <tr>
+                        <td>{{ categorie.id }}</td>
+                        <td>{{ categorie.name }}</td>
+                        <td>{{ categorie.enable }}</td>
+                        <td>
+                            <a href="{{ path('admin.categories.update', {id: categorie.id}) }}" class="btn btn-warning">Modifer</a>
+                            {% include 'Backend/Components/_delete.html.twig' with {
+                                url: path('admin.categories.delete', {id: categorie.id}),
+                                message: 'Êtes-vous sûr de vouloir supprimer cette categorie ?',
+                                id: categorie.id
+                            } %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+	</section>
+{% endblock %}
+
