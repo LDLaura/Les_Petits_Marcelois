@@ -3,7 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Article;
+use App\Entity\Categorie;
+use App\Repository\CategorieRepository;
+use Doctrine\ORM\QueryBuilder;
 use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Text;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -42,6 +46,21 @@ class ArticleType extends AbstractType
                 'download_label' => false,
                 'image_uri' => true,
                 'asset_helper' => true,
+            ])
+
+            ->add('categories', EntityType::class, [
+                'label' => 'Catégories', 
+                'class' => Categorie::class,
+                'choice_label' => 'name',
+                'expanded' => false,
+                'multiple' => true,
+                // 'autocomplete' => true,
+                //To display only active categories and sort them alphabetically
+                'query_builder' => function(CategorieRepository $repo): QueryBuilder{
+                    return $repo->createQueryBuilder('c')
+                    ->andwhere('c.enable = true')
+                    ->orderBy('c.name', 'ASC');
+                },
             ]);
     }
 

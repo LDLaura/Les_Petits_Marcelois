@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\EnableTrait;
@@ -49,6 +51,17 @@ class Article
 
     #[ORM\Column]
     private ?int $imageSize = null;
+
+    /**
+     * @var Collection<int, categorie>
+     */
+    #[ORM\ManyToMany(targetEntity: categorie::class, inversedBy: 'articles')]
+    private Collection $categories;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -127,5 +140,29 @@ class Article
     public function setImageSize(?int $imageSize): void
     {
         $this->imageSize = $imageSize;
+    }
+
+    /**
+     * @return Collection<int, categorie>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(categorie $category): static
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(categorie $category): static
+    {
+        $this->categories->removeElement($category);
+
+        return $this;
     }
 }

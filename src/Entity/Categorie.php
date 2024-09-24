@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Entity\Traits\DateTimeTrait;
 use App\Entity\Traits\EnableTrait;
 use App\Repository\CategorieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -25,6 +27,17 @@ class Categorie
     #[Assert\Length(max: 255)]
     private ?string $name = null;
 
+    /**
+     * @var Collection<int, Article>
+     */
+    #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'categories')]
+    private Collection $articles;
+
+    public function __construct()
+    {
+        $this->articles = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -38,6 +51,33 @@ class Categorie
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): static
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles->add($article);
+            $article->addCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Article $article): static
+    {
+        if ($this->articles->removeElement($article)) {
+            $article->removeCategory($this);
+        }
 
         return $this;
     }

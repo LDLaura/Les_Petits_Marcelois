@@ -19,7 +19,7 @@ class UserInfosController extends AbstractController
     {
     }
 
-    #[Route('/index', name: '.index')]
+    #[Route('', name: '.index')]
     public function index(UserInfosRepository $userInfosRepository): Response
     {
         return $this->render('Backend/UserInfos/index.html.twig', [

@@ -9,33 +9,37 @@
 	<section class="container-fluid mt-4">
 		<h1 class="text-center">Administration des articles</h1>
 		<a href="{{ path('admin.articles.create')}}" class="btn btn-primary">Créer un produit</a>
-        <table>
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Titre</th>
-                    <th>Contenu</th>
-                    <th>Nom image</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for article in articles %}
-                    <tr>
-                        <td>{{ article.id }}</td>
-                        <td>{{ article.title }}</td>
-                        <td>{{ article.content }}</td>
-                        <td>{{ article.imageName }}</td>
-                        <td>
-                            <a href="{{ path('admin.articles.update', {id: article.id}) }}" class="btn btn-warning">Modifer</a>
-                            {% include 'Backend/Components/_delete.html.twig' with {
+		<table>
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Titre</th>
+					<th>Contenu</th>
+					<th>Nom image</th>
+					<th>Catégorie</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for article in articles %}
+					<tr>
+						<td>{{ article.id }}</td>
+						<td>{{ article.title }}</td>
+						<td>{{ article.content }}</td>
+						<td>{{ article.imageName }}</td>
+						{% for categorie in article.categories %}
+							<td>{{ categorie.name }}</td>
+						{% endfor %}
+						<td>
+							<a href="{{ path('admin.articles.update', {id: article.id}) }}" class="btn btn-warning">Modifer</a>
+							{% include 'Backend/Components/_delete.html.twig' with {
                                 url: path('admin.articles.delete', {id: article.id}),
                                 message: 'Êtes-vous sûr de vouloir supprimer cet article ?',
                                 id: article.id
                             } %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 	</section>
 {% endblock %}
