@@ -11,6 +11,15 @@ vich_uploader:
             delete_on_update: true
             delete_on_remove: true
 
+        # Mapping for producits images
+        products_image : 
+            uri_prefix: /images/products
+            upload_destination: "%kernel.project_dir%/public/images/products"
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true
+
     metadata:
         type: attribute
 

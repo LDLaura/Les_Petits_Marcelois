@@ -6,7 +6,6 @@ use App\Entity\Article;
 use App\Entity\Categorie;
 use App\Repository\CategorieRepository;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Text;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
