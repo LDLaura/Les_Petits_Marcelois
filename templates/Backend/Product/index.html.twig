@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Administration des produits
+	{{ parent() }}
+{% endblock %}
+
+{% block body %}
+	<section class="container-fluid mt-4">
+		<h1 class="text-center">Administration des produits</h1>
+		<a href="{{ path('admin.products.create')}}" class="btn btn-primary">Créer un produit</a>
+		<table>
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Nom</th>
+					<th>Contenu</th>
+					<th>Nom image</th>
+					<th>Catégorie</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for product in products %}
+					<tr>
+						<td>{{ product.id }}</td>
+						<td>{{ product.name }}</td>
+						<td>{{ product.content }}</td>
+						<td>{{ product.imageName }}</td>
+						<td>
+							<a href="{{ path('admin.products.update', {id: product.id}) }}" class="btn btn-warning">Modifer</a>
+							{% include 'Backend/Components/_delete.html.twig' with {
+                                url: path('admin.products.delete', {id: product.id}),
+                                message: 'Êtes-vous sûr de vouloir supprimer ce produit ?',
+                                id: product.id
+                            } %}
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</section>
+{% endblock %}

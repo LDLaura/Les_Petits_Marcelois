@@ -8,19 +8,18 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\EnableTrait;
 use App\Entity\Traits\DateTimeTrait;
-use App\Repository\ArticleRepository;
-use DateTimeImmutable;
+use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-#[ORM\Entity(repositoryClass: ArticleRepository::class)]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_TITLE', fields: ['title'])]
-#[UniqueEntity(fields: ['title'], message: 'Ce titre existe déjà')]
+#[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[ORM\UniqueConstraint(name: 'CONSTRAINTS_PRODUCT_UNIQUE_NAME', fields: ['name'])]
+#[UniqueEntity(fields: ['name'], message: 'Ce nom existe déjà')]
 #[ORM\HasLifecycleCallbacks]
 #[Vich\Uploadable]
-class Article
+class Product
 {
     use DateTimeTrait, EnableTrait;
 
@@ -32,18 +31,14 @@ class Article
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    private ?string $title = null;
+    private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 20000)]
     private ?string $content = null;
 
-    #[ORM\ManyToOne(inversedBy: 'articles')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
-
-    #[Vich\UploadableField(mapping: 'articles_image', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[Vich\UploadableField(mapping: 'products_image', fileNameProperty:'imageName', size: 'imageSize')]
     private ?File $imageFile = null;
 
     #[ORM\Column(length: 255)]
@@ -52,30 +47,23 @@ class Article
     #[ORM\Column]
     private ?int $imageSize = null;
 
-    /**
-     * @var Collection<int, categorie>
-     */
-    #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'articles')]
-    private Collection $categories;
-
-    public function __construct()
-    {
-        $this->categories = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user=null;    
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getName(): ?string
     {
-        return $this->title;
+        return $this->name;
     }
 
-    public function setTitle(string $title): static
+    public function setName(string $name): static
     {
-        $this->title = $title;
+        $this->name = $name;
 
         return $this;
     }
@@ -92,28 +80,14 @@ class Article
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     public function setImageFile(?File $imageFile = null): void
     {
         $this->imageFile = $imageFile;
 
-        if (null != $imageFile) {
-            // It is required that at least one field changes if you are using doctrine
-            // otherwise the event listeners won't be called and the file is lost
-            $this->updatedAt = new DateTimeImmutable();
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTimeImmutable();
         }
-    } 
+    }
 
     public function getImageFile(): ?File
     {
@@ -142,27 +116,28 @@ class Article
         $this->imageSize = $imageSize;
     }
 
-    /**
-     * @return Collection<int, categorie>
-     */
-    public function getCategories(): Collection
+    public function getUser(): ?User
     {
-        return $this->categories;
+        return $this->user;
     }
 
-    public function addCategory(categorie $category): static
+    public function setUser(?User $user): static
     {
-        if (!$this->categories->contains($category)) {
-            $this->categories->add($category);
-        }
+        $this->user = $user;
 
         return $this;
     }
 
-    public function removeCategory(categorie $category): static
-    {
-        $this->categories->removeElement($category);
+    // public function removeProduct(Product $product): static
+    // {
+    //     if ($this->products->removeElement($product)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($product->getUser() === $this) {
+    //             $product->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
+
 }

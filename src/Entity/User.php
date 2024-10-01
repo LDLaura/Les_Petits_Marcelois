@@ -47,16 +47,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?UserInfos $userInfos = null;
 
-    /**
-     * @var Collection<int, Categorie>
-     */
-    #[ORM\OneToMany(targetEntity: Categorie::class, mappedBy: 'user')]
-    private Collection $categories;
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'user')]
+    private Collection $products;
 
     public function __construct()
     {
         $this->articles = new ArrayCollection();
-        $this->categories = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -180,30 +177,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Categorie>
+        /**
+     * @return Collection<int, Product>
      */
-    public function getCategories(): Collection
+    public function getProduct(): Collection
     {
-        return $this->categories;
+        return $this->products;
     }
 
-    public function addCategory(Categorie $category): static
+    public function addProduct(Product $product): static
     {
-        if (!$this->categories->contains($category)) {
-            $this->categories->add($category);
-            $category->setUser($this);
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeCategory(Categorie $category): static
+    public function removeProduct(Product $product): static
     {
-        if ($this->categories->removeElement($category)) {
+        if ($this->products->removeElement($product)) {
             // set the owning side to null (unless already changed)
-            if ($category->getUser() === $this) {
-                $category->setUser(null);
+            if ($product->getUser() === $this) {
+                $product->setUser(null);
             }
         }
 
