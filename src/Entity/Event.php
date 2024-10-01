@@ -24,8 +24,8 @@ class Event
     #[Assert\Length(max: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToOne(inversedBy: 'event', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     private ?user $user = null;
 
     public function getId(): ?int
