@@ -16,7 +16,7 @@
 					<th>Nom</th>
 					<th>Contenu</th>
 					<th>Nom image</th>
-					<th>Catégorie</th>
+					<th>Evénement</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -26,6 +26,9 @@
 						<td>{{ product.name }}</td>
 						<td>{{ product.content }}</td>
 						<td>{{ product.imageName }}</td>
+						{# {% for event in product.event %}
+							<td>{{ event.name }}</td>
+						{% endfor %} #}
 						<td>
 							<a href="{{ path('admin.products.update', {id: product.id}) }}" class="btn btn-warning">Modifer</a>
 							{% include 'Backend/Components/_delete.html.twig' with {

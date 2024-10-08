@@ -44,7 +44,7 @@ class ArticleController extends AbstractController
             $this->em->persist($article);
             $this->em->flush();
 
-            $this->addFlash('success', 'L\'article a bien été créé');
+            $this->addFlash('success', 'L\'article a bien été créé.');
             
             return $this->redirectToRoute('admin.articles.index');
         }

@@ -56,4 +56,5 @@ class Event
 
         return $this;
     }
+
 }
