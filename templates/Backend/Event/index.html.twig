@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Administration des événements
+	{{ parent() }}
+{% endblock %}
+
+{% block body %}
+	<section class="container-fluid mt-4">
+		<h1 class="text-center">Administration des événements</h1>
+		<a href="{{ path('admin.events.create')}}" class="btn btn-primary">Créer un évenement</a>
+		<table>
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Nom</th>
+					<th>Actif</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for event in events %}
+					<tr>
+						<td>{{ event.id }}</td>
+						<td>{{ event.name }}</td>
+						<td>{{ event.enable }}</td>
+						<td>
+							<a href="{{ path('admin.events.update', {id: event.id}) }}" class="btn btn-warning">Modifer</a>
+							{% include 'Backend/Components/_delete.html.twig' with {
+                                url: path('admin.events.delete', {id: event.id}),
+                                message: 'Êtes-vous sûr de vouloir supprimer cet événement ?',
+                                id: event.id
+                            } %}
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</section>
+{% endblock %}
+
