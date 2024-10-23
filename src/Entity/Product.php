@@ -47,10 +47,6 @@ class Product
     #[ORM\Column]
     private ?int $imageSize = null;
 
-    #[ORM\ManyToOne(inversedBy: 'products')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user=null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -114,18 +110,6 @@ class Product
     public function setImageSize(?int $imageSize): void
     {
         $this->imageSize = $imageSize;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
     }
 
     // public function removeProduct(Product $product): static
