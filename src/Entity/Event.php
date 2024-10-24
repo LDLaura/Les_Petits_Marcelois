@@ -24,10 +24,6 @@ class Event
     #[Assert\Length(max: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
-    private ?user $user = null;
-
     #[ORM\OneToOne(inversedBy: 'event', cascade: ['persist', 'remove'])]
     private ?Product $product = null;
 
@@ -44,18 +40,6 @@ class Event
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getUser(): ?user
-    {
-        return $this->user;
-    }
-
-    public function setUser(user $user): static
-    {
-        $this->user = $user;
 
         return $this;
     }
