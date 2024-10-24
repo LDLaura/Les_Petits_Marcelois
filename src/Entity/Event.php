@@ -28,6 +28,9 @@ class Event
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     private ?user $user = null;
 
+    #[ORM\OneToOne(inversedBy: 'event', cascade: ['persist', 'remove'])]
+    private ?Product $product = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -53,6 +56,18 @@ class Event
     public function setUser(user $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Product $product): static
+    {
+        $this->product = $product;
 
         return $this;
     }

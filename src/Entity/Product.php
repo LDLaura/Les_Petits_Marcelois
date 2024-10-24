@@ -47,6 +47,9 @@ class Product
     #[ORM\Column]
     private ?int $imageSize = null;
 
+    #[ORM\OneToOne(mappedBy: 'product', cascade: ['persist', 'remove'])]
+    private ?Event $event = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -123,5 +126,27 @@ class Product
 
     //     return $this;
     // }
+
+    public function getEvent(): ?Event
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?Event $event): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($event === null && $this->event !== null) {
+            $this->event->setProduct(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($event !== null && $event->getProduct() !== $this) {
+            $event->setProduct($this);
+        }
+
+        $this->event = $event;
+
+        return $this;
+    }
 
 }
